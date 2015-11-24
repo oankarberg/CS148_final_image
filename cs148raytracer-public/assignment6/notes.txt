@@ -1,0 +1,7 @@
+Naive Acceleration: 12.0188 seconds
+Bounding Volume Hierarchy: 12.9561 seconds
+Uniform Grid:  13.3678 seconds
+
+Task 2
+(5, 5, 5) , 12.0455 seconds
+(3, 3, 3) 11.1396  seconds

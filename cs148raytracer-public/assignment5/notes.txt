@@ -1,0 +1,21 @@
+1 Sample per pixel 8.29016 seconds
+2 Samples per pixel 15.9438 seconds 
+4 Samples per pixel 24.9226 seconds 
+8 Samples per pixel 43.4118 seconds 
+
+Task2 
+sampler->SetEarlyExitParameters(1.f * SMALL_EPSILON, 4); 40.122 seconds, Ray-Triangle Intersections: 153486948
+sampler->SetEarlyExitParameters(10.f * SMALL_EPSILON, 4); 30.1547 seconds ,Ray-Triangle Intersections: 153171802
+sampler->SetEarlyExitParameters(100.f * SMALL_EPSILON, 4); 28.7757 seconds, Ray-Triangle Intersections: 150291322 
+
+Task3
+Sampling grid 4x4, min samples 16. Number of samples 32
+-- START Ray Tracer --
+...
+-- END Ray Tracerr: 103.154 seconds --
+====================== DIAGNOSTICS START ======================
+Ray-Triangle Intersections: 600476754
+Ray-Box Intersections: 0
+Rays Created: 750611524
+====================== DIAGNOSTICS END ========================
+Program ended with exit code: 0
