@@ -8,7 +8,7 @@
 #include "common/Output/ImageWriter.h"
 #include "common/Rendering/Renderer.h"
 
-bool DOFisOn = true;
+bool DOFisOn = false;
 const float DOFAperture = 0.03f;
 #include "common/Scene/Geometry/Primitives/Triangle/Triangle.h"
 RayTracer::RayTracer(std::unique_ptr<class Application> app):
