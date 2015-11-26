@@ -11,7 +11,7 @@
 #include "common/Rendering/Material/Material.h"
 #include "glm/gtx/component_wise.hpp"
 
-#define VISUALIZE_PHOTON_MAPPING 1
+#define VISUALIZE_PHOTON_MAPPING 0
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     BackwardRenderer(scene, sampler), 
@@ -151,18 +151,28 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
 glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const
 {
     glm::vec3 finalRenderColor = BackwardRenderer::ComputeSampleColor(intersection, fromCameraRay);
-#if VISUALIZE_PHOTON_MAPPING
+    //finalRenderColor = glm::vec3(0.f,0.f,0.f);
     Photon intersectionVirtualPhoton;
     intersectionVirtualPhoton.position = intersection.intersectionRay.GetRayPosition(intersection.intersectionT);
+    const MeshObject* parentObject = intersection.intersectedPrimitive->GetParentMeshObject();
+    const Material* objectMaterial = parentObject->GetMaterial();
 
     std::vector<Photon> foundPhotons;
-    diffuseMap.find_within_range(intersectionVirtualPhoton, 0.003f, std::back_inserter(foundPhotons));
+    float radius = 0.008f;
+    diffuseMap.find_within_range(intersectionVirtualPhoton, radius, std::back_inserter(foundPhotons));
     if (!foundPhotons.empty()) {
+        #if VISUALIZE_PHOTON_MAPPING
         finalRenderColor += glm::vec3(1.f, 0.f, 0.f);
+        #endif
     }
-#endif
+    for (Photon photon : foundPhotons) {
+        const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, photon.intensity, photon.toLightRay, fromCameraRay, 1.0f);
+        finalRenderColor += 3.f*brdfResponse/(radius*radius*PI);
+    }
     return finalRenderColor;
 }
+
+
 
 void PhotonMappingRenderer::SetNumberOfDiffusePhotons(int diffuse)
 {

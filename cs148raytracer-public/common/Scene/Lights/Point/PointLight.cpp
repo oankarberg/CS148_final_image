@@ -26,6 +26,6 @@ void PointLight::GenerateRandomPhotonRay(Ray& ray) const
         z = ((rand())/(float)RAND_MAX + (-0.5f))*2.f;
 //        std::cout << x << y << z << " x*x + y*y + z*z) " << ( x*x + y*y + z*z) << std::endl;
     }while((x*x + y*y + z*z) > 1);
-    ray.SetRayDirection(glm::vec3(x, y, z));
+    ray.SetRayDirection(glm::normalize(glm::vec3(x, y, z)));
     
 }
