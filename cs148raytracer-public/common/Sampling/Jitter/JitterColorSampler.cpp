@@ -21,6 +21,7 @@ std::unique_ptr<SamplerState> JitterColorSampler::CreateSampler(std::random_devi
 {
     std::unique_ptr<JitterSamplerState> state = make_unique<JitterSamplerState>(randomDevice, maxSamples, dimensions);
     state->samplesPerCell = maxSamples / (gridSize.x * gridSize.y * gridSize.z);
+//    std::cout << "maxSamples " << maxSamples  << " lol " <<  (gridSize.x * gridSize.y * gridSize.z)<< std::endl;
     assert(state->samplesPerCell > 0);
     return std::move(state);
 }

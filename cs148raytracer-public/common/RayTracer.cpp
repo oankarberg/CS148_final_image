@@ -8,6 +8,8 @@
 #include "common/Output/ImageWriter.h"
 #include "common/Rendering/Renderer.h"
 
+bool DOFisOn = true;
+const float DOFAperture = 0.03f;
 #include "common/Scene/Geometry/Primitives/Triangle/Triangle.h"
 RayTracer::RayTracer(std::unique_ptr<class Application> app):
     storedApplication(std::move(app))
@@ -51,7 +53,12 @@ void RayTracer::Run()
                 normalizedCoordinates /= currentResolution;
 
                 // Construct ray, send it out into the scene and see what we hit.
-                std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates);
+                std::shared_ptr<Ray> cameraRay;
+                if(DOFisOn){
+                    cameraRay = currentCamera->GenerateDOFRayForNormalizedCoordinates(normalizedCoordinates, DOFAperture);
+                }else{
+                	cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates);
+                }
                 assert(cameraRay);
 
                 IntersectionState rayIntersection(storedApplication->GetMaxReflectionBounces(), storedApplication->GetMaxRefractionBounces());

@@ -26,12 +26,21 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
 
     const glm::vec3 rayDirection = glm::normalize(targetPosition - rayOrigin);
     
+    return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
+}
+
+std::shared_ptr<Ray> PerspectiveCamera::GenerateDOFRayForNormalizedCoordinates(glm::vec2 coordinate, float apertureRadius) const
+{
+    //DEPTH OF FIELD. Use a focal plane for the ray to target, and a lens circle do shoot the ray from
     
-	//DEPTH OF FIELD. Use a focal plane for the ray to target, and a lens circle do shoot the ray from
+//    float apertureRadius = 0.03f;
+    float randomR1;
+    float randomR2;
+    do{
+        randomR1 = (rand()/(float)RAND_MAX + (-0.5f))*2.f;
+        randomR2 = (rand()/(float)RAND_MAX + (-0.5f))*2.f;
+    }while((randomR1*randomR1 + randomR2*randomR2 ) > 1.f);
     
-    float apertureRadius = 0.03f;
-    float randomR1 = (rand()/(float)RAND_MAX + (-0.5f))*2.f;
-    float randomR2 = (rand()/(float)RAND_MAX + (-0.5f))*2.f;
     
     const float focalLength = 3.5f;
     const float planeFocalHeight = std::tan(fov / 2.f) * 2.f * focalLength;
@@ -46,19 +55,12 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
     const float xOffsetFocal = planeFocalWidth * (coordinate.x - 0.5f);
     const float yOffsetFocal = -1.f * planeFocalHeight  * (coordinate.y - 0.5f);
     
-
+    
     const glm::vec3 targetFocalPosition = cameraPos + glm::vec3(GetForwardDirection())*focalLength + glm::vec3(GetRightDirection()) * xOffsetFocal + glm::vec3(GetUpDirection()) * yOffsetFocal;
     
     const glm::vec3 rayFocalDirection = glm::normalize(targetFocalPosition - rayFocalOrigin);
-
-
     
     return std::make_shared<Ray>(rayFocalOrigin + rayFocalDirection * zNear, rayFocalDirection, zFar - zNear);
-    
-//    return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
-    
-    
-    
 }
 
 void PerspectiveCamera::SetZNear(float input)

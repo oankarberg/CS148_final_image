@@ -48,7 +48,7 @@ std::shared_ptr<Scene> Assignment8::CreateScene() const
 std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 {
     std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
-    jitter->SetGridSize(glm::ivec3(5, 5, 2));
+    jitter->SetGridSize(glm::ivec3(1, 1, 1));
     return jitter;
 }
 
@@ -60,7 +60,7 @@ std::shared_ptr<class Renderer> Assignment8::CreateRenderer(std::shared_ptr<Scen
 int Assignment8::GetSamplesPerPixel() const
 {
     // ASSIGNMENT 5 TODO: Change the '1' here to increase the maximum number of samples used per pixel. (Part 1).
-    return 4;
+    return 1;
 }
 
 bool Assignment8::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)
