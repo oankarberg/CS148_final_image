@@ -18,7 +18,7 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
     std::shared_ptr<BlinnPhongMaterial> cubeMaterial = std::make_shared<BlinnPhongMaterial>();
     cubeMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
     cubeMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
-    cubeMaterial->SetReflectivity(0.3f);
+    cubeMaterial->SetReflectivity(0.0f);
 
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
@@ -74,7 +74,7 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
 std::shared_ptr<ColorSampler> Assignment6::CreateSampler() const
 {
     std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
-    jitter->SetGridSize(glm::ivec3(1, 1, 1));
+    jitter->SetGridSize(glm::ivec3(2, 2, 1));
     return jitter;
 }
 
@@ -85,7 +85,7 @@ std::shared_ptr<class Renderer> Assignment6::CreateRenderer(std::shared_ptr<Scen
 
 int Assignment6::GetSamplesPerPixel() const
 {
-    return 1;
+    return 16;
 }
 
 bool Assignment6::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)

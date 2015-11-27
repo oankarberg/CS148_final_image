@@ -33,7 +33,7 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateDOFRayForNormalizedCoordinates(g
 {
     //DEPTH OF FIELD. Use a focal plane for the ray to target, and a lens circle do shoot the ray from
     
-//    float apertureRadius = 0.03f;
+//    apertureRadius = 0.03f;
     float randomR1;
     float randomR2;
     do{
