@@ -18,21 +18,37 @@ std::shared_ptr<Scene> Assignment8::CreateScene() const
     std::shared_ptr<BlinnPhongMaterial> cubeMaterial = std::make_shared<BlinnPhongMaterial>();
     cubeMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
     cubeMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
-    cubeMaterial->SetReflectivity(0.3f);
+    cubeMaterial->SetAmbient(glm::vec3(0.2f));
+//    cubeMaterial->SetReflectivity(0.3f);
 
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment6-Alt.obj", &loadedMaterials);
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("Water.obj", &loadedMaterials);
+    std::cout <<" cubeObjects.size();"<< cubeObjects.size() << std::endl;
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
-        materialCopy->SetTransmittance(0.9f);
-        materialCopy->SetIOR(1.5f);
+//        materialCopy->SetAmbient(glm::vec3(0,0,0));
+        materialCopy->SetAmbient(glm::vec3(0.2f));
+        if (i == 1){
+//            materialCopy->SetAmbient(glm::vec3(0,0,0));
+            materialCopy->SetReflectivity(0.5f);
+            materialCopy->SetTransmittance(0.4f);
+            materialCopy->SetIOR(1.5f);
+        }
+        if (i == 0){
+//            materialCopy->SetAmbient(glm::vec3(0,0,0));
+            materialCopy->SetTransmittance(0.9f);
+            materialCopy->SetReflectivity(0.3f);
+//            materialCopy->SetIOR(1.5f);
+        }
+
         cubeObjects[i]->SetMaterial(materialCopy);
     }
 
     std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
     cubeSceneObject->AddMeshObject(cubeObjects);
+    cubeSceneObject->MultScale(0.2f);
     cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
     cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
     newScene->AddSceneObject(cubeSceneObject);
@@ -41,8 +57,9 @@ std::shared_ptr<Scene> Assignment8::CreateScene() const
 
     // Lights
     std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>();
-    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
-    pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
+//    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
+    pointLight->SetPosition(glm::vec3(-0.005f, -0.01f, 1.5328f));
+    pointLight->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f));
     newScene->AddLight(pointLight);
 
     return newScene;
@@ -50,13 +67,14 @@ std::shared_ptr<Scene> Assignment8::CreateScene() const
 std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 {
     std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
-    jitter->SetGridSize(glm::ivec3(1, 1, 1));
+    jitter->SetGridSize(glm::ivec3(2, 2, 1));
     return jitter;
 }
 
 std::shared_ptr<class Renderer> Assignment8::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
 {
-    return std::make_shared<PhotonMappingRenderer>(scene, sampler);
+    
+    return std::make_shared<BackwardRenderer>(scene, sampler);
 }
 
 int Assignment8::GetSamplesPerPixel() const
