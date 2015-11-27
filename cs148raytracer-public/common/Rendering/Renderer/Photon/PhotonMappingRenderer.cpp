@@ -15,7 +15,7 @@
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     BackwardRenderer(scene, sampler), 
-    diffusePhotonNumber(1000000),
+    diffusePhotonNumber(800000),
     maxPhotonBounces(1000)
 {
     srand(static_cast<unsigned int>(time(NULL)));
@@ -81,7 +81,7 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
         return;
     }
     if(storedScene->Trace(photonRay, &state)){
-        if(path.size() != 1){ //Insert if path isnt 1
+       // if(path.size() != 1){ //Insert if path isnt 1
             const glm::vec3 intersectionPoint = state.intersectionRay.GetRayPosition(state.intersectionT);
         
             Photon myPhoton;
@@ -94,7 +94,7 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
            
             
             
-        }
+     //   }
         //    Russian roulette
         
         
@@ -136,6 +136,8 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
             
             Ray *reflRay= new Ray(photonRay->GetRayPosition(state.intersectionT) + n*LARGE_EPSILON ,  ReflectWorld, photonRay->GetMaxT());
             
+            
+            
             TracePhoton(photonMap, reflRay , lightIntensity, path,  currentIOR, remainingBounces - 1);
         }
 
@@ -152,23 +154,86 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
 {
     glm::vec3 finalRenderColor = BackwardRenderer::ComputeSampleColor(intersection, fromCameraRay);
     //finalRenderColor = glm::vec3(0.f,0.f,0.f);
+    glm::vec3 indirectColor = glm::vec3(0.f,0.f,0.f);
+    
+    
+    const int FG_RAYS = 3;
+    const float MULTIPLIER = 10.f;
+    const float RADIUS = 0.01f;
+    
+    for (int i= 0; i < FG_RAYS; ) {
+        //Sample a random ray from hemisphere
+        float u1 = rand()/(float)RAND_MAX;
+        float u2 = rand()/(float)RAND_MAX;
+        float radius = std::sqrt(u1);
+        float theta = 2.f*PI*u2;
+        float x = radius * cosf(theta);
+        float y = radius * sinf(theta);
+        float z = std::sqrt(1.f - u1);
+        glm::vec3 reflectionRay = glm::normalize(glm::vec3(x, y, z));
+        
+        glm::vec3 n = intersection.ComputeNormal();
+        glm::vec3 t = glm::cross(n, glm::vec3(1.f,0.f,0.f));
+        float close = glm::dot(glm::vec3(1.f,0.f,0.f),n);
+        if(std::abs(close) > 0.9f) {
+            t = glm::cross(n, glm::vec3(0.f, 1.f, 0.f));
+        }
+        t = glm::normalize(t);
+        glm::vec3 b = normalize(glm::cross(n, t));
+        
+        
+        glm::vec3 ReflectWorld = glm::mat3(t,b,n)*reflectionRay;
+        
+        
+        IntersectionState state(0, 0);
+        
+        Ray *reflRay= new Ray(intersection.intersectionRay.GetRayPosition(intersection.intersectionT) + n*LARGE_EPSILON ,  ReflectWorld);
+        i++;
+        if(storedScene->Trace(reflRay, &state)){
+            //i++;
+            Photon intersectionVirtualPhoton;
+            intersectionVirtualPhoton.position = state.intersectionRay.GetRayPosition(state.intersectionT);
+            const MeshObject* parentObject = state.intersectedPrimitive->GetParentMeshObject();
+            const Material* objectMaterial = parentObject->GetMaterial();
+            std::vector<Photon> foundPhotons;
+            diffuseMap.find_within_range(intersectionVirtualPhoton, RADIUS, std::back_inserter(foundPhotons));
+            float dotAngle = glm::dot(ReflectWorld, n);
+            if (!foundPhotons.empty()) {
+            }
+            for (Photon photon : foundPhotons) {
+                const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(state, photon.intensity, photon.toLightRay, fromCameraRay, 1.0f);
+                
+                indirectColor += dotAngle * MULTIPLIER*brdfResponse/(RADIUS*RADIUS*PI);
+                //std::cout << glm::to_string(brdfResponse);
+            }
+
+        }
+        
+    }
+    
+    //IF NO FINAL GATHERING
+    /*
     Photon intersectionVirtualPhoton;
     intersectionVirtualPhoton.position = intersection.intersectionRay.GetRayPosition(intersection.intersectionT);
     const MeshObject* parentObject = intersection.intersectedPrimitive->GetParentMeshObject();
     const Material* objectMaterial = parentObject->GetMaterial();
-
     std::vector<Photon> foundPhotons;
-    float radius = 0.008f;
-    diffuseMap.find_within_range(intersectionVirtualPhoton, radius, std::back_inserter(foundPhotons));
-    if (!foundPhotons.empty()) {
-        #if VISUALIZE_PHOTON_MAPPING
-        finalRenderColor += glm::vec3(1.f, 0.f, 0.f);
-        #endif
-    }
+    diffuseMap.find_within_range(intersectionVirtualPhoton, RADIUS, std::back_inserter(foundPhotons));
+    
     for (Photon photon : foundPhotons) {
         const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, photon.intensity, photon.toLightRay, fromCameraRay, 1.0f);
-        finalRenderColor += 3.f*brdfResponse/(radius*radius*PI);
+        indirectColor += MULTIPLIER*brdfResponse/(RADIUS*RADIUS*PI);
     }
+    */
+    indirectColor = indirectColor/(float)(FG_RAYS);
+    
+    #if VISUALIZE_PHOTON_MAPPING
+    if (!foundPhotons.empty()) {
+        finalRenderColor += glm::vec3(1.f, 0.f, 0.f);
+    }
+    #endif
+    
+    finalRenderColor = finalRenderColor + indirectColor;
     return finalRenderColor;
 }
 
