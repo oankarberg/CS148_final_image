@@ -41,9 +41,16 @@ void RayTracer::Run()
     // Perform forward ray tracing
     const int maxSamplesPerPixel = storedApplication->GetSamplesPerPixel();
     assert(maxSamplesPerPixel >= 1);
-
+    
+    int amountofPixels =currentResolution.y *currentResolution.x;
+    int pixelsProcessed = 0;
+    int fivePercent = amountofPixels/20;
+    std::cout << "Preparation done!";
     for (int r = 0; r < static_cast<int>(currentResolution.y); ++r) {
         for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {
+            if (pixelsProcessed%fivePercent == 0)
+                std::cout << (pixelsProcessed/(float)amountofPixels) * 100.f << "% done." << std::endl ;
+            pixelsProcessed++;
             imageWriter.SetPixelColor(currentSampler->ComputeSamplesAndColor(maxSamplesPerPixel, 2, [&](glm::vec3 inputSample) {
                 const glm::vec3 minRange(-0.5f, -0.5f, 0.f);
                 const glm::vec3 maxRange(0.5f, 0.5f, 0.f);
