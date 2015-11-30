@@ -7,6 +7,8 @@ class Assignment8 : public Application
 public:
     virtual std::shared_ptr<class Camera> CreateCamera() const override;
     virtual std::shared_ptr<class Scene> CreateScene() const override;
+    std::shared_ptr<class Scene> LoadRealScene() const;
+    std::shared_ptr<class Scene> LoadCornellScene() const;
     virtual std::shared_ptr<class ColorSampler> CreateSampler() const override;
     virtual std::shared_ptr<class Renderer> CreateRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler) const override;
     virtual int GetSamplesPerPixel() const override;
