@@ -13,16 +13,16 @@ std::shared_ptr<Camera> Assignment8::CreateCamera() const
     
     // CORNELL CAMERA
     
-    /*camera->SetPosition(glm::vec3(0.f, -4.1469f, 0.73693f));
-    camera->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-     */
+//    camera->SetPosition(glm::vec3(0.f, -4.1469f, 0.73693f));
+//    camera->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+    
     return camera;
 }
 
 std::shared_ptr<Scene> Assignment8::CreateScene() const
 {
     return LoadRealScene();
-    //return LoadCornellScene();
+//    return LoadCornellScene();
 }
 std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 {
@@ -94,54 +94,61 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     newScene->AddSceneObject(cubeSceneObject);
     
     // Objects
-    std::vector<std::shared_ptr<aiMaterial>> waterMaterials;
-    std::vector<std::shared_ptr<MeshObject>> waterObjects = MeshLoader::LoadMesh("Water.obj", &waterMaterials);
-    for (size_t i = 0; i < waterObjects.size(); ++i) {
-        std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
-        materialCopy->LoadMaterialFromAssimp(waterMaterials[i]);
-        //        materialCopy->SetAmbient(glm::vec3(0,0,0));
-        materialCopy->SetAmbient(glm::vec3(0.0f));
-        if (i == 1){
-            //            materialCopy->SetAmbient(glm::vec3(0,0,0));
-            materialCopy->SetReflectivity(0.4f);
-            materialCopy->SetTransmittance(0.7f);
-            materialCopy->SetIOR(1.5f);
-        }
-        if (i == 0){
-            //            materialCopy->SetAmbient(glm::vec3(0,0,0));
-            materialCopy->SetTransmittance(0.95f);
-            materialCopy->SetReflectivity(0.2f);
-            //            materialCopy->SetIOR(1.5f);
-        }
-        
-        waterObjects[i]->SetMaterial(materialCopy);
-    }
-    
-    std::shared_ptr<SceneObject> waterObject = std::make_shared<SceneObject>();
-    waterObject->AddMeshObject(waterObjects);
-    waterObject->MultScale(0.1f);
-    waterObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-    waterObject->SetPosition(glm::vec3(0.f,0.f,0.f));
-    waterObject->CreateAccelerationData(AccelerationTypes::BVH);
-    newScene->AddSceneObject(waterObject);
+//    std::vector<std::shared_ptr<aiMaterial>> waterMaterials;
+//    std::vector<std::shared_ptr<MeshObject>> waterObjects = MeshLoader::LoadMesh("Water.obj", &waterMaterials);
+//    for (size_t i = 0; i < waterObjects.size(); ++i) {
+//        std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
+//        materialCopy->LoadMaterialFromAssimp(waterMaterials[i]);
+//        //        materialCopy->SetAmbient(glm::vec3(0,0,0));
+//        materialCopy->SetAmbient(glm::vec3(0.0f));
+//        if (i == 1){
+//            //            materialCopy->SetAmbient(glm::vec3(0,0,0));
+//            materialCopy->SetReflectivity(0.4f);
+//            materialCopy->SetTransmittance(0.7f);
+//            materialCopy->SetIOR(1.5f);
+//        }
+//        if (i == 0){
+//            //            materialCopy->SetAmbient(glm::vec3(0,0,0));
+//            materialCopy->SetTransmittance(0.95f);
+//            materialCopy->SetReflectivity(0.2f);
+//            //            materialCopy->SetIOR(1.5f);
+//        }
+//        
+//        waterObjects[i]->SetMaterial(materialCopy);
+//    }
+//    
+//    std::shared_ptr<SceneObject> waterObject = std::make_shared<SceneObject>();
+//    waterObject->AddMeshObject(waterObjects);
+//    waterObject->MultScale(0.1f);
+//    waterObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+//    waterObject->SetPosition(glm::vec3(0.f,0.f,0.f));
+//    waterObject->CreateAccelerationData(AccelerationTypes::BVH);
+//    newScene->AddSceneObject(waterObject);
     
     
     
     std::vector<std::shared_ptr<aiMaterial>> tableMaterials;
-    std::vector<std::shared_ptr<MeshObject>> table = MeshLoader::LoadMesh("table/table.obj", &tableMaterials);
+    std::vector<std::shared_ptr<MeshObject>> table = MeshLoader::LoadMesh("glass_table/glass_table.obj", &tableMaterials);
+    std::cout <<"  table.size() " <<  table.size() << std::endl;
     for (size_t i = 0; i < table.size(); ++i) {
+//        if(i != 2){
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(tableMaterials[i]);
         materialCopy->SetAmbient(glm::vec3(0.1f,0.1f,0.1f));
         table[i]->SetMaterial(materialCopy);
+        if(i == 2){
+//            materialCopy->SetReflectivity(0.4f);
+        	materialCopy->SetTransmittance(0.9f);
+        	materialCopy->SetIOR(1.5f);
+        }
     }
     
     std::shared_ptr<SceneObject> tableObject = std::make_shared<SceneObject>();
     tableObject->AddMeshObject(table);
-    tableObject->MultScale(1.f);
+    tableObject->MultScale(.3f);
     tableObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
     tableObject->CreateAccelerationData(AccelerationTypes::BVH);
-    tableObject->SetPosition(glm::vec3(0.f,0.f,0.f));
+    tableObject->SetPosition(glm::vec3(0.f,0.f,-0.4f));
     newScene->AddSceneObject(tableObject);
     
     
@@ -199,6 +206,11 @@ std::shared_ptr<Scene> Assignment8::LoadCornellScene() const {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
         cubeObjects[i]->SetMaterial(materialCopy);
+        if(i == 6 || i == 5){
+            //            materialCopy->SetReflectivity(0.4f);
+            materialCopy->SetTransmittance(0.9f);
+            materialCopy->SetIOR(1.1f);
+        }
     }
     
     std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
