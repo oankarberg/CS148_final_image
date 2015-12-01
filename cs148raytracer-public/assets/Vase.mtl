@@ -1,0 +1,28 @@
+newmtl Ceramic
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Default
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Ground
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.7 0.7 0.7
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+map_Kd texture[15]-1.jpg
+

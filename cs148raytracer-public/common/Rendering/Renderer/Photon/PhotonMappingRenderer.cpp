@@ -130,14 +130,13 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
 glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const
 {
     glm::vec3 finalRenderColor = BackwardRenderer::ComputeSampleColor(intersection, fromCameraRay);
-    //glm::vec3 finalRenderColor = glm::vec3(0.f,0.f,0.f);
+    // glm::vec3 finalRenderColor = glm::vec3(0.f,0.f,0.f);
     glm::vec3 indirectColor = glm::vec3(0.f,0.f,0.f);
     
-
     #define FG 0
     const int FG_RAYS =16;
-    const float MULTIPLIER = 15.f;
-    const float RADIUS = 0.008f;
+    const float MULTIPLIER = 5.f;
+    const float RADIUS = 0.02f;
     
     
     const MeshObject* intersectionObject = intersection.intersectedPrimitive->GetParentMeshObject();
