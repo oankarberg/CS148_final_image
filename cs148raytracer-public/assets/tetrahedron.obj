@@ -1,5 +1,7 @@
 # tetrahedron.obj
 #
+
+mtllib tetrahedron.mtl
  
 g tetrahedron
  v 1.00 0.00 -0.577

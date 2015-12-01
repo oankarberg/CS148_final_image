@@ -15,7 +15,7 @@
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     BackwardRenderer(scene, sampler), 
-    diffusePhotonNumber(1000000),
+    diffusePhotonNumber(800000),
     maxPhotonBounces(1000)
 {
     srand(static_cast<unsigned int>(time(NULL)));
@@ -37,7 +37,7 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
         if (!currentLight) {
             continue;
         }
-        totalLightIntensity = glm::length(currentLight->GetLightColor());
+        totalLightIntensity += glm::length(currentLight->GetLightColor());
     }
 
     // Shoot photons -- number of photons for light is proportional to the light's intensity relative to the total light intensity of the scene.
@@ -79,7 +79,7 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
     state.currentIOR = currentIOR;
     
     if (storedScene->Trace(photonRay, &state)){
-        if(path.size() != 0){
+        if(path.size() != 1){
             const glm::vec3 intersectionPoint = state.intersectionRay.GetRayPosition(state.intersectionT);
             
             Photon myPhoton;
@@ -133,13 +133,17 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
     //glm::vec3 finalRenderColor = glm::vec3(0.f,0.f,0.f);
     glm::vec3 indirectColor = glm::vec3(0.f,0.f,0.f);
     
-    
+
+    #define FG 0
     const int FG_RAYS =16;
     const float MULTIPLIER = 15.f;
-    const float RADIUS = 0.02f;
+    const float RADIUS = 0.008f;
+    
     
     const MeshObject* intersectionObject = intersection.intersectedPrimitive->GetParentMeshObject();
     const Material* intersectionMaterial = intersectionObject->GetMaterial();
+    
+    #if FG
     
     for (int i= 0; i < FG_RAYS; ) {
         //Sample a random ray from hemisphere
@@ -169,7 +173,6 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
         refDir = tbn * refDir;
         Ray* refRay = new Ray(intersection.intersectionRay.GetRayPosition(intersection.intersectionT)+ n*LARGE_EPSILON, refDir);
         
-        
         IntersectionState state(0, 0);
         
         i++;
@@ -198,27 +201,27 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
         }
         
     }
-    
-    //IF NO FINAL GATHERING
-    /*
+    #else
     Photon intersectionVirtualPhoton;
     intersectionVirtualPhoton.position = intersection.intersectionRay.GetRayPosition(intersection.intersectionT);
     const MeshObject* parentObject = intersection.intersectedPrimitive->GetParentMeshObject();
     const Material* objectMaterial = parentObject->GetMaterial();
     std::vector<Photon> foundPhotons;
     diffuseMap.find_within_range(intersectionVirtualPhoton, RADIUS, std::back_inserter(foundPhotons));
-    
-    for (Photon photon : foundPhotons) {
-        const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, photon.intensity, photon.toLightRay, fromCameraRay, 1.0f);
-        indirectColor += MULTIPLIER*brdfResponse/(RADIUS*RADIUS*PI);
-    }
-    */
-    
     #if VISUALIZE_PHOTON_MAPPING
     if (!foundPhotons.empty()) {
         finalRenderColor += glm::vec3(1.f, 0.f, 0.f);
     }
     #endif
+    for (Photon photon : foundPhotons) {
+        const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, photon.intensity, photon.toLightRay, fromCameraRay, 1.0f);
+        indirectColor += MULTIPLIER*brdfResponse/(RADIUS*RADIUS*PI);
+    }
+
+    #endif
+    
+     
+    
     
     finalRenderColor = finalRenderColor + indirectColor;
     return finalRenderColor;
