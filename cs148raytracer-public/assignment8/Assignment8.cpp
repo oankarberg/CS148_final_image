@@ -15,7 +15,7 @@ std::shared_ptr<Camera> Assignment8::CreateCamera() const
     // OPTION 2
     camera->SetPosition(glm::vec3(0.0f, -2.6069f, 1.17593f));
     //camera->Rotate(glm::vec3(0.f, 1.0f, 0.f), -PI / 16.f);
-    camera->Rotate(glm::vec3(1.f, 0.0f, 0.f), -PI / 16.f);
+    camera->Rotate(glm::vec3(1.f, 0.0f, 0.f), -PI / 20.f);
      camera->Rotate(glm::vec3(1.f, 0.0f, 0.f), PI / 2.f);
      
     
@@ -84,21 +84,21 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Empty-White.obj", &loadedMaterials);
-    for (size_t i = 0; i < cubeObjects.size(); ++i) {
-        std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
-        materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
-        materialCopy->SetAmbient(glm::vec3(0.f,0.f,0.f));
-        cubeObjects[i]->SetMaterial(materialCopy);
-    }
-    
-    std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
-    cubeSceneObject->AddMeshObject(cubeObjects);
-    cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-    cubeSceneObject->MultScale(1.0f);
-    cubeSceneObject->SetPosition(glm::vec3(0.f,0.f,-0.0f));
-    cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
-    newScene->AddSceneObject(cubeSceneObject);
+//    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Empty-White.obj", &loadedMaterials);
+//    for (size_t i = 0; i < cubeObjects.size(); ++i) {
+//        std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
+//        materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
+//        materialCopy->SetAmbient(glm::vec3(0.f,0.f,0.f));
+//        cubeObjects[i]->SetMaterial(materialCopy);
+//    }
+//    
+//    std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
+//    cubeSceneObject->AddMeshObject(cubeObjects);
+//    cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+//    cubeSceneObject->MultScale(1.0f);
+//    cubeSceneObject->SetPosition(glm::vec3(0.f,0.f,-0.0f));
+//    cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
+//    newScene->AddSceneObject(cubeSceneObject);
     
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> waterMaterials;
@@ -143,8 +143,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         materialCopy->SetAmbient(glm::vec3(0.1f,0.1f,0.1f));
         table[i]->SetMaterial(materialCopy);
         if(i == 2){
-//            materialCopy->SetReflectivity(0.4f);
-        	materialCopy->SetTransmittance(0.9f);
+            materialCopy->SetReflectivity(1.f);
+        	materialCopy->SetTransmittance(.0f);
         	materialCopy->SetIOR(1.01f);
         }
 //        if(i == 3){
@@ -207,8 +207,30 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     vase->SetPosition(glm::vec3(0.2f,0.4f,0.43f));
     vase->CreateAccelerationData(AccelerationTypes::BVH);
     newScene->AddSceneObject(vase);
-
-    
+	
+    //LIVINGROOM WALLS AND FLOOR
+    std::vector<std::shared_ptr<aiMaterial>> loadedMaterialsLivingRoom;
+    std::vector<std::shared_ptr<MeshObject>>  livingroomTemp = MeshLoader::LoadMesh("livingroom/Modern_living_room_window.obj", &loadedMaterialsLivingRoom);
+    for (size_t i = 0; i < livingroomTemp.size(); ++i) {
+        std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
+        materialCopy->LoadMaterialFromAssimp(loadedMaterialsLivingRoom[i]);
+        materialCopy->SetAmbient(glm::vec3(0.2f,0.2f,0.2f));
+        livingroomTemp[i]->SetMaterial(materialCopy);
+        if(i == 0 || i == 1){
+            materialCopy->SetReflectivity(0.2f);
+            materialCopy->SetTransmittance(1.f);
+            materialCopy->SetIOR(1.01f);
+        }
+        
+    }
+    std::shared_ptr<SceneObject> livingroomObject = std::make_shared<SceneObject>();
+    livingroomObject->AddMeshObject(livingroomTemp);
+    livingroomObject->MultScale(.4f);
+//    livingroomObject->Rotate(glm::vec3(0.f, 1.f, 0.f), PI / 2.f);
+    livingroomObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+    livingroomObject->CreateAccelerationData(AccelerationTypes::BVH);
+    livingroomObject->SetPosition(glm::vec3(2.2f,-.1f,-.5f));
+	newScene->AddSceneObject(livingroomObject);
     
     // Lights
     std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>();
@@ -221,7 +243,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     //    pointLight2->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight2->SetPosition(glm::vec3(-0.15f, -0.01f, 0.2328f));
     pointLight2->SetLightColor(glm::vec3(0.4f, 0.4f, 0.4f));
-    //newScene->AddLight(pointLight2);
+    newScene->AddLight(pointLight2);
     
     return newScene;
 
@@ -263,6 +285,7 @@ std::shared_ptr<Scene> Assignment8::LoadCornellScene() const {
     pointLight->SetPosition(glm::vec3(-0.005f, -0.01f, 1.5328f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
     newScene->AddLight(pointLight);
+    
     
     return newScene;
 }
