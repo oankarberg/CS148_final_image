@@ -8,8 +8,10 @@ std::shared_ptr<Camera> Assignment8::CreateCamera() const
     
     //Real scene camera
     camera->Rotate(glm::vec3(0.f, 1.f, 0.f), -PI / 4.f);
-    camera->SetPosition(glm::vec3(-1.6f, -2.0069f, 0.23693f));
-    camera->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+
+    camera->SetPosition(glm::vec3(-1.6f, -2.0069f, 0.63693f));
+    camera->Rotate(glm::vec3(1.f, 0.0f, 0.f), PI / 2.f);
+
     
     // CORNELL CAMERA
     
@@ -33,7 +35,6 @@ std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 
 std::shared_ptr<class Renderer> Assignment8::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
 {
-    
     return std::make_shared<BackwardRenderer>(scene, sampler);
 }
 
@@ -50,12 +51,12 @@ bool Assignment8::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleInd
 
 int Assignment8::GetMaxReflectionBounces() const
 {
-    return 4;
+    return 8;
 }
 
 int Assignment8::GetMaxRefractionBounces() const
 {
-    return 4;
+    return 8;
 }
 
 glm::vec2 Assignment8::GetImageOutputResolution() const
@@ -88,8 +89,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
     cubeSceneObject->AddMeshObject(cubeObjects);
     cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
-    cubeSceneObject->MultScale(1.35f);
-    cubeSceneObject->SetPosition(glm::vec3(0.f,0.f,-0.4f));
+    cubeSceneObject->MultScale(1.0f);
+    cubeSceneObject->SetPosition(glm::vec3(0.f,0.f,-0.0f));
     cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
     newScene->AddSceneObject(cubeSceneObject);
     
@@ -139,8 +140,13 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         if(i == 2){
 //            materialCopy->SetReflectivity(0.4f);
         	materialCopy->SetTransmittance(0.9f);
-        	materialCopy->SetIOR(1.5f);
+        	materialCopy->SetIOR(1.01f);
         }
+//        if(i == 3){
+//            //            materialCopy->SetReflectivity(0.4f);
+//            materialCopy->SetTransmittance(0.9f);
+//            materialCopy->SetIOR(1.5f);
+//        }
     }
     
     std::shared_ptr<SceneObject> tableObject = std::make_shared<SceneObject>();
@@ -148,7 +154,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     tableObject->MultScale(.3f);
     tableObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
     tableObject->CreateAccelerationData(AccelerationTypes::BVH);
-    tableObject->SetPosition(glm::vec3(0.f,0.f,-0.4f));
+    tableObject->SetPosition(glm::vec3(0.f,0.f,-0.f));
     newScene->AddSceneObject(tableObject);
     
     
@@ -187,6 +193,12 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     pointLight->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f));
     newScene->AddLight(pointLight);
     
+    std::shared_ptr<PointLight> pointLight2 = std::make_shared<PointLight>();
+    //    pointLight2->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
+    pointLight2->SetPosition(glm::vec3(-0.15f, -0.01f, 0.2328f));
+    pointLight2->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f));
+    newScene->AddLight(pointLight2);
+    
     return newScene;
 
 }
@@ -198,6 +210,7 @@ std::shared_ptr<Scene> Assignment8::LoadCornellScene() const {
     std::shared_ptr<BlinnPhongMaterial> cubeMaterial = std::make_shared<BlinnPhongMaterial>();
     cubeMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
     cubeMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
+//    cubeMaterial->SetReflectivity(0.4f);
     
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
@@ -207,7 +220,7 @@ std::shared_ptr<Scene> Assignment8::LoadCornellScene() const {
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
         cubeObjects[i]->SetMaterial(materialCopy);
         if(i == 6 || i == 5){
-            //            materialCopy->SetReflectivity(0.4f);
+        	materialCopy->SetReflectivity(0.0f);
             materialCopy->SetTransmittance(0.9f);
             materialCopy->SetIOR(1.1f);
         }

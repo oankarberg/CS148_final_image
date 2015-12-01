@@ -37,7 +37,7 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
         if (!currentLight) {
             continue;
         }
-        totalLightIntensity = glm::length(currentLight->GetLightColor());
+        totalLightIntensity += glm::length(currentLight->GetLightColor());
     }
 
     // Shoot photons -- number of photons for light is proportional to the light's intensity relative to the total light intensity of the scene.
@@ -134,7 +134,7 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
     glm::vec3 indirectColor = glm::vec3(0.f,0.f,0.f);
     
     
-    const int FG_RAYS =16;
+    const int FG_RAYS =1;
     const float MULTIPLIER = 15.f;
     const float RADIUS = 0.02f;
     
