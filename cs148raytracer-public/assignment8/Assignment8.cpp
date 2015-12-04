@@ -20,15 +20,15 @@ std::shared_ptr<Camera> Assignment8::CreateCamera() const
 //    camera->SetPosition(glm::vec3(0.f, -4.1469f, 0.73693f));
 //    camera->SetPosition(glm::vec3(-10.f, -12.f, 40.f));
 //    camera->Rotate(glm::vec3(0.f, 0.f, 1.f), PI / 2.f);
-        camera->SetPosition(glm::vec3(-5.4f,0.7f, 6.0f));
+       camera->SetPosition(glm::vec3(-5.4f,0.7f, 6.0f));
 //    Camera for livingroom.obj
 //    camera->SetPosition(glm::vec3(0.f,3.f, 40.73693f));
-    camera->Rotate(glm::vec3(0.f, 1.f, 0.f), -PI / 5.f);
+   camera->Rotate(glm::vec3(0.f, 1.f, 0.f), -PI / 5.f);
     
     
     // CORNELL CAMERA
     /*
-    camera->SetPosition(glm::vec3(0.f, -4.1469f, 0.73693f));
+    camera->SetPosition(glm::vec3(0.f, -2.1469f, 0.73693f));
     camera->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
     */
     return camera;
@@ -36,8 +36,8 @@ std::shared_ptr<Camera> Assignment8::CreateCamera() const
 
 std::shared_ptr<Scene> Assignment8::CreateScene() const
 {
-    return LoadRealScene();
-//    return LoadCornellScene();
+   return LoadRealScene();
+    return LoadCornellScene();
 }
 std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 {
@@ -48,13 +48,13 @@ std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 
 std::shared_ptr<class Renderer> Assignment8::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
 {
-    return std::make_shared<BackwardRenderer>(scene, sampler);
+    return std::make_shared<PhotonMappingRenderer>(scene, sampler);
 }
 
 int Assignment8::GetSamplesPerPixel() const
 {
     // ASSIGNMENT 5 TODO: Change the '1' here to increase the maximum number of samples used per pixel. (Part 1).
-    return 16;
+    return 1;
 }
 
 bool Assignment8::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)
@@ -69,7 +69,7 @@ int Assignment8::GetMaxReflectionBounces() const
 
 int Assignment8::GetMaxRefractionBounces() const
 {
-    return 4;
+    return 8;
 }
 
 glm::vec2 Assignment8::GetImageOutputResolution() const
@@ -232,7 +232,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         if(meshName == "Background"){
             materialCopy->SetAffectedByLight(false);
         }else{
-            materialCopy->SetAmbient(glm::vec3(0.25f));
+            materialCopy->SetAmbient(glm::vec3(0.0f));
         }
         //Only Transparent Objects
         if(meshName == "Curtain2_curtain2" || meshName == "Curtain1_curtain1"){
@@ -278,7 +278,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>();
     //    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetPosition(glm::vec3(-2.4f,-.29f,.3f));
-    pointLight->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*0.5f);
+    pointLight->SetPosition(glm::vec3(-0.4f,-.29f,.3f));
+    pointLight->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*5.0f);
 //    newScene->AddLight(pointLight);
 //
 //    Middle of room...typ
@@ -293,7 +294,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     std::shared_ptr<PointLight> pointLight3 = std::make_shared<PointLight>();
     //    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight3->SetPosition(glm::vec3(-2.65f, 2.0f,-3.78f));
-    pointLight3->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*0.5f);
+    pointLight3->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*1.0f);
     newScene->AddLight(pointLight3);
     
     
@@ -305,8 +306,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     dirLight->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 4);
     
 //        dirLight->SetLightColor(glm::vec3(0.f,1.f,0.f));
-    dirLight->SetLightColor(glm::vec3(182.f,126.f,91.f) / 255.f);
-    newScene->AddLight(dirLight);
+    dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
+  //newScene->AddLight(dirLight);
     
     
 //    
@@ -332,15 +333,11 @@ std::shared_ptr<Scene> Assignment8::LoadCornellScene() const {
     
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Water.obj", &loadedMaterials);
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment8.obj", &loadedMaterials);
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
-        cubeObjects[i]->SetMaterial(materialCopy);
-        if(i == 6 || i == 5){
-        	materialCopy->SetReflectivity(0.0f);
-            materialCopy->SetTransmittance(0.9f);
-        }
-        
+        materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
+        materialCopy->SetAmbient(glm::vec3(0.f));
         cubeObjects[i]->SetMaterial(materialCopy);
     }
     
