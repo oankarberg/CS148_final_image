@@ -58,5 +58,6 @@ void MeshObject::SetMaterial(std::shared_ptr<Material> inputMaterial)
 
 void MeshObject::SetName(const std::string& input)
 {
+
     meshName = input;
 }

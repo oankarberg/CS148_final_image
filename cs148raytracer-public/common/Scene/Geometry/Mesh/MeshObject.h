@@ -20,6 +20,7 @@ public:
     {
         return boundingBox;
     }
+    
 
     virtual void SetMaterial(std::shared_ptr<class Material> inputMaterial);
     virtual const class Material* GetMaterial() const;

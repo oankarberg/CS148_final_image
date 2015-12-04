@@ -9,7 +9,7 @@ public:
 
     void SetDiffuse(glm::vec3 input);
     void SetSpecular(glm::vec3 inputColor, float inputShininess);
-
+    virtual void SetAffectedByLight(bool isAffected);
     virtual std::shared_ptr<Material> Clone() const override;
 
     virtual void LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial) override;
@@ -26,5 +26,6 @@ protected:
 private:
     glm::vec3 diffuseColor;
     glm::vec3 specularColor;
+    bool affectedByLight;
     float shininess;
 };

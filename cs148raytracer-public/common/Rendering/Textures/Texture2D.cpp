@@ -40,6 +40,8 @@ glm::ivec2 Texture2D::HandleBorderCondition(const glm::ivec2& coord) const
 glm::vec4 Texture2D::InternalSample(const glm::ivec2& coord) const
 {
     int index = ComputeLinearIndex(HandleBorderCondition(coord));
+//    std::cout << "index " << index << std::endl;
+    index = abs(index);
     glm::vec4 result = glm::vec4(textureData[index], textureData[index + 1], textureData[index + 2], textureData[index + 3]) / 255.f;
     return result;
 }
