@@ -6,7 +6,7 @@
 #include "assimp/material.h"
 
 BlinnPhongMaterial::BlinnPhongMaterial():
-    shininess(0.f)
+    shininess(0.f),affectedByLight(true)
 {
 }
 
@@ -20,10 +20,21 @@ void BlinnPhongMaterial::SetSpecular(glm::vec3 inputColor, float inputShininess)
     specularColor = inputColor;
     shininess = inputShininess;
 }
+void BlinnPhongMaterial::SetAffectedByLight(bool isAffected)
+{
+    if(isAffected == false){
+        this->SetAmbient(glm::vec3(0.0f));
+    }
+    affectedByLight = isAffected;
+}
 
 glm::vec3 BlinnPhongMaterial::ComputeDiffuse(const IntersectionState& intersection, const glm::vec3& lightColor, const float NdL, const float NdH, const float NdV, const float VdH) const
 {
+
     const glm::vec3 useDiffuseColor = (textureStorage.find("diffuseTexture") != textureStorage.end()) ? glm::vec3(textureStorage.at("diffuseTexture")->Sample(intersection.ComputeUV())) : diffuseColor;
+    if(!affectedByLight){
+        return useDiffuseColor;
+    }
     const float d = NdL;
     const glm::vec3 diffuseResponse = d * useDiffuseColor * lightColor;
     return diffuseResponse;
@@ -34,6 +45,9 @@ glm::vec3 BlinnPhongMaterial::ComputeSpecular(const IntersectionState& intersect
     const glm::vec3 useSpecularColor = (textureStorage.find("specularTexture") != textureStorage.end()) ? glm::vec3(textureStorage.at("specularTexture")->Sample(intersection.ComputeUV())) : specularColor;
     const float highlight = std::pow(NdH, shininess);
     const glm::vec3 specularResponse = highlight * specularColor * lightColor;
+    if(!affectedByLight){
+        return glm::vec3(0.f);
+    }
     return specularResponse;
 }
 

@@ -164,6 +164,7 @@ std::vector<std::shared_ptr<MeshObject>> LoadMesh(const std::string& filename, s
 
         if (currentNode->mNumMeshes) {
             for (unsigned int i = 0; i < currentNode->mNumMeshes; ++i) {
+//                std::cout << "currentNode->mName.C_Str() " << currentNode->mName.C_Str() << std::endl;
                 loadedMeshes[currentNode->mMeshes[i]]->SetName(currentNode->mName.C_Str());
             }
         }

@@ -16,6 +16,7 @@ public:
 
     virtual bool HasDiffuseReflection() const = 0;
     virtual bool HasSpecularReflection() const { return IsReflective(); }
+    virtual void SetAffectedByLight(bool affected) = 0;
 
     void SetReflectivity(float input);
     bool IsReflective() const { return reflectivity > SMALL_EPSILON; }
