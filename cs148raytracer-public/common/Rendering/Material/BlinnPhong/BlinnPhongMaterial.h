@@ -16,7 +16,9 @@ public:
 
     virtual bool HasDiffuseReflection() const;
     virtual bool HasSpecularReflection() const;
-
+    
+    virtual bool isAffectedByLight() const {return affectedByLight;}
+    
     virtual glm::vec3 GetBaseDiffuseReflection() const;
     virtual glm::vec3 GetBaseSpecularReflection() const;
 protected:
