@@ -11,11 +11,11 @@
 #include "common/Rendering/Material/Material.h"
 #include "glm/gtx/component_wise.hpp"
 
-#define VISUALIZE_PHOTON_MAPPING 0
+#define VISUALIZE_PHOTON_MAPPING 1
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     BackwardRenderer(scene, sampler), 
-    diffusePhotonNumber(800000),
+    diffusePhotonNumber(2000000),
     maxPhotonBounces(1000)
 {
     srand(static_cast<unsigned int>(time(NULL)));
@@ -49,6 +49,7 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
 
         const float proportion = glm::length(currentLight->GetLightColor()) / totalLightIntensity;
         const int totalPhotonsForLight = static_cast<const int>(proportion * totalPhotons);
+        
         const glm::vec3 photonIntensity = currentLight->GetLightColor() / static_cast<float>(totalPhotonsForLight);
         for (int j = 0; j < totalPhotonsForLight; ++j) {
             Ray photonRay;
@@ -58,6 +59,7 @@ void PhotonMappingRenderer::GenericPhotonMapGeneration(PhotonKdtree& photonMap, 
             TracePhoton(photonMap, &photonRay, photonIntensity, path, 1.f, maxPhotonBounces);
         }
     }
+    std::cout << "Photon Generation Done. Photons absorbed: " << photonMap.size() << std::endl;
 }
 
 void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay, glm::vec3 lightIntensity, std::vector<char>& path, float currentIOR, int remainingBounces)
@@ -79,6 +81,15 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
     state.currentIOR = currentIOR;
     
     if (storedScene->Trace(photonRay, &state)){
+        
+        const MeshObject* hitMeshObject = state.intersectedPrimitive->GetParentMeshObject();
+        /*
+        if (hitMeshObject->GetName() == "window_1" || hitMeshObject->GetName() == "window_2" || !hitMeshObject->GetMaterial()->isAffectedByLight()){
+            Ray* newRay = new Ray(photonRay->GetRayPosition(state.intersectionT)+ photonRay->GetRayDirection()*0.1f, photonRay->GetRayDirection(), photonRay->GetMaxT());
+            
+            TracePhoton(photonMap, newRay, lightIntensity, path, currentIOR, remainingBounces);
+            return;
+        }*/
         if(path.size() != 1){
             const glm::vec3 intersectionPoint = state.intersectionRay.GetRayPosition(state.intersectionT);
             
@@ -89,7 +100,7 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
             myPhoton.toLightRay = ray;
             photonMap.insert(myPhoton);
         }
-        const MeshObject* hitMeshObject = state.intersectedPrimitive->GetParentMeshObject();
+        
         const Material* hitMaterial = hitMeshObject->GetMaterial();
         glm::vec3 ref = hitMaterial->GetBaseDiffuseReflection();
         float pr = std::max(ref.x, ref.y);
@@ -135,13 +146,15 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
     
     #define FG 0
     const int FG_RAYS =16;
-    const float MULTIPLIER = 5.f;
-    const float RADIUS = 0.02f;
+    const float MULTIPLIER = 15.f;
+    const float RADIUS = 0.003f;
     
     
     const MeshObject* intersectionObject = intersection.intersectedPrimitive->GetParentMeshObject();
     const Material* intersectionMaterial = intersectionObject->GetMaterial();
-    
+    if(!intersectionMaterial->isAffectedByLight()){
+        
+    }
     #if FG
     
     for (int i= 0; i < FG_RAYS; ) {
@@ -214,13 +227,10 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
     #endif
     for (Photon photon : foundPhotons) {
         const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, photon.intensity, photon.toLightRay, fromCameraRay, 1.0f);
-        indirectColor += MULTIPLIER*brdfResponse/(RADIUS*RADIUS*PI);
+        //indirectColor += MULTIPLIER*(brdfResponse)/(RADIUS*RADIUS*PI);
     }
 
     #endif
-    
-     
-    
     
     finalRenderColor = finalRenderColor + indirectColor;
     return finalRenderColor;
