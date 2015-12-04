@@ -41,9 +41,31 @@ glm::vec3 BackwardRenderer::ComputeSampleColor(const IntersectionState& intersec
 
         for (size_t s = 0; s < sampleRays.size(); ++s) {
             // note that max T should be set to be right before the light.
+
 //            if (storedScene->Trace(&sampleRays[s], nullptr) && objectMaterial->GetTransmittance() < 0.9f) {
 //                continue;
 //            }
+
+            
+            
+            bool reachedLight = true;
+             IntersectionState state(0, 0);
+            while (storedScene->Trace(&sampleRays[s], &state)) {
+                const MeshObject* hitObject = state.intersectedPrimitive->GetParentMeshObject();
+                const Material* hitMat = hitObject->GetMaterial();
+                if (hitMat->GetTransmittance() < 0.9 && hitMat->isAffectedByLight()){
+                    reachedLight = false;
+                    break;
+                }
+                glm::vec3 hitPoint = state.intersectionRay.GetRayPosition(state.intersectionT);
+                sampleRays[s].SetMaxT(sampleRays[s].GetMaxT()-(state.intersectionT+ LARGE_EPSILON));
+                sampleRays[s].SetRayPosition(hitPoint + LARGE_EPSILON * sampleRays[s].GetRayDirection());
+            }
+            if (!reachedLight)
+                continue;
+            
+		
+
             const float lightAttenuation = light->ComputeLightAttenuation(intersectionPoint);
 
             // Note that the material should compute the parts of the lighting equation too.

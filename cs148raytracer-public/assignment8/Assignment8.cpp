@@ -218,7 +218,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     //LIVINGROOM WALLS AND FLOOR
     std::shared_ptr<BlinnPhongMaterial> roomMaterial = std::make_shared<BlinnPhongMaterial>();
     roomMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
-    roomMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
+//    roomMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
     roomMaterial->SetAmbient(glm::vec3(0.2f));
     
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterialsLivingRoom;
@@ -294,6 +294,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     dirLight->SetPosition(glm::vec3(0.f,0.f,0.f));
     dirLight->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
 	dirLight->Rotate(glm::vec3(1.0f, 0.0f,0.0f), PI / 10);
+    
+//        dirLight->SetLightColor(glm::vec3(0.f,1.f,0.f));
     dirLight->SetLightColor(glm::vec3(182.f,126.f,91.f) / 255.f);
     newScene->AddLight(dirLight);
     
