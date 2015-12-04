@@ -24,7 +24,7 @@ Texture* Material::GetTexture(const std::string& id) const
 glm::vec3 Material::ComputeNonLightDependentBRDF(const class Renderer* renderer, const struct IntersectionState& intersection) const
 {
     if (!isAffectedByLight()){
-        ComputeDiffuse(intersection, glm::vec3(1.f),0, 0, 0, 0);
+        return ComputeDiffuse(intersection, glm::vec3(1.f),0, 0, 0, 0);
     }
     const glm::vec3 reflectionColor = ComputeReflection(renderer, intersection);
     const glm::vec3 transmissionColor = ComputeTransmission(renderer, intersection);
