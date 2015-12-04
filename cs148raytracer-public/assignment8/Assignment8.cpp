@@ -293,8 +293,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
 //    pointLight->SetPosition(glm::vec3(-2.4f,-.29f,.3f));
     dirLight->SetPosition(glm::vec3(0.f,0.f,0.f));
     dirLight->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
-//        dirLight->Rotate(glm::vec3(0.0f, 0.0f,1.0f), -PI / 2);
-    dirLight->SetLightColor(glm::vec3(0.0f, 1.0f, 0.0f));
+	dirLight->Rotate(glm::vec3(1.0f, 0.0f,0.0f), PI / 10);
+    dirLight->SetLightColor(glm::vec3(182.f,126.f,91.f) / 255.f);
     newScene->AddLight(dirLight);
     
     

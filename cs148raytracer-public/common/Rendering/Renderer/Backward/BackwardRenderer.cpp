@@ -41,9 +41,9 @@ glm::vec3 BackwardRenderer::ComputeSampleColor(const IntersectionState& intersec
 
         for (size_t s = 0; s < sampleRays.size(); ++s) {
             // note that max T should be set to be right before the light.
-            if (storedScene->Trace(&sampleRays[s], nullptr)) {
-                continue;
-            }
+//            if (storedScene->Trace(&sampleRays[s], nullptr) && objectMaterial->GetTransmittance() < 0.9f) {
+//                continue;
+//            }
             const float lightAttenuation = light->ComputeLightAttenuation(intersectionPoint);
 
             // Note that the material should compute the parts of the lighting equation too.
