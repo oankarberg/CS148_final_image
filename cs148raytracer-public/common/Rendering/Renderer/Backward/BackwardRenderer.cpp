@@ -21,7 +21,7 @@ glm::vec3 BackwardRenderer::ComputeSampleColor(const IntersectionState& intersec
     if (!intersection.hasIntersection) {
         return glm::vec3();
     }
-
+    
     glm::vec3 intersectionPoint = intersection.intersectionRay.GetRayPosition(intersection.intersectionT);
     const MeshObject* parentObject = intersection.intersectedPrimitive->GetParentMeshObject();
     assert(parentObject);
