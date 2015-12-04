@@ -53,7 +53,7 @@ glm::vec3 BackwardRenderer::ComputeSampleColor(const IntersectionState& intersec
             while (storedScene->Trace(&sampleRays[s], &state)) {
                 const MeshObject* hitObject = state.intersectedPrimitive->GetParentMeshObject();
                 const Material* hitMat = hitObject->GetMaterial();
-                if (hitMat->GetTransmittance() < 0.9 && hitMat->isAffectedByLight()){
+                if (hitMat->GetTransmittance() <= 0.9 && hitMat->isAffectedByLight()){
                     reachedLight = false;
                     break;
                 }
