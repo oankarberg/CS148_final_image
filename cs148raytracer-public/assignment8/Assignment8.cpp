@@ -218,7 +218,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     //LIVINGROOM WALLS AND FLOOR
     std::shared_ptr<BlinnPhongMaterial> roomMaterial = std::make_shared<BlinnPhongMaterial>();
     roomMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
-    roomMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
+//    roomMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
     roomMaterial->SetAmbient(glm::vec3(0.2f));
     
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterialsLivingRoom;
@@ -259,6 +259,9 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         }
         if(meshName == "Floor"){
             materialCopy->SetReflectivity(0.1f);
+        }
+        if(meshName == "Carpet_Plane"){
+            materialCopy->SetReflectivity(0.f);
         }
         livingroomTemp[i]->SetMaterial(materialCopy);
         
