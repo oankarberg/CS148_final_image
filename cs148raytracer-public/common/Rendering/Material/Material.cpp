@@ -96,6 +96,12 @@ void Material::SetIOR(float input)
     indexOfRefraction = input;
 }
 
+void Material::SetSpecular(glm::vec3 inputColor, float inputShininess)
+{
+    specularColor = inputColor;
+    shininess = inputShininess;
+}
+
 void Material::LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial)
 {
     if (!assimpMaterial) {
@@ -108,6 +114,7 @@ void Material::LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpM
 
     assimpMaterial->Get(AI_MATKEY_REFRACTI, &indexOfRefraction, nullptr);
     assimpMaterial->Get(AI_MATKEY_COLOR_AMBIENT, glm::value_ptr(ambient), nullptr);
+    assimpMaterial->Get(AI_MATKEY_COLOR_SPECULAR, glm::value_ptr(specularColor), nullptr);
 }
 
 void Material::SetTexture(const std::string& id, std::shared_ptr<class Texture> inputTexture)

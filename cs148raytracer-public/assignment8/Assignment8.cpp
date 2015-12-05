@@ -64,12 +64,12 @@ bool Assignment8::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleInd
 
 int Assignment8::GetMaxReflectionBounces() const
 {
-    return 4;
+    return 1;
 }
 
 int Assignment8::GetMaxRefractionBounces() const
 {
-    return 4;
+    return 1;
 }
 
 glm::vec2 Assignment8::GetImageOutputResolution() const
@@ -227,6 +227,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         std::shared_ptr<Material> materialCopy = roomMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterialsLivingRoom[i]);
         materialCopy->SetAmbient(glm::vec3(0.0f));
+        materialCopy->SetSpecular(glm::vec3(0.0f), 0.0f);
         livingroomTemp[i]->SetMaterial(materialCopy);
         
         std::string meshName = livingroomTemp[i]->GetName();
@@ -244,8 +245,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         //Only Glass Objects
         if(meshName == "Table_glass_top_Glass" || meshName == "window_2" || meshName == "window_1" ){
              std::cout << "Meshname  "<< meshName  << std::endl;
-            materialCopy->SetReflectivity(0.235f);
-            materialCopy->SetAmbient(glm::vec3(0.10f));
+            materialCopy->SetReflectivity(0.435f);
+            materialCopy->SetAmbient(glm::vec3(0.00f));
             materialCopy->SetTransmittance(.91f);
             materialCopy->SetIOR(1.44f);
         }
@@ -261,6 +262,17 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         }
         if(meshName == "Floor"){
             materialCopy->SetReflectivity(0.05f);
+        }
+        if(meshName == "Whisky" || meshName == "Whisky_in_vase"){
+            materialCopy->SetReflectivity(0.1f);
+            materialCopy->SetIOR(1.33f);
+            materialCopy->SetTransmittance(.41f);
+        }
+        
+        if(meshName == "Whiskey_glass" ||meshName == "Whiskey_glass.001" || meshName == "Icecube"  || meshName == "Icecube.001"  || meshName == "Whiskey_vase" ){
+            materialCopy->SetReflectivity(0.1f);
+            materialCopy->SetIOR(1.53f);
+            materialCopy->SetTransmittance(.91f);
         }
         if(meshName == "Carpet_Plane"){
             materialCopy->SetReflectivity(0.f);
@@ -290,15 +302,24 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
 //    pointLight2->SetPosition(glm::vec3(-0.15f, 4.01f, 4.2328f));
 //     pointLight2->SetPosition(glm::vec3(-1.4f,2.f,3.4f));
     pointLight2->SetPosition(glm::vec3(2.25603f,2.29666f,1.9797f));
-    pointLight2->SetLightColor(glm::vec3(1.f,1.f,1.f));
+    pointLight2->SetLightColor(glm::vec3(1.f,1.f,1.f)*1.f);
     newScene->AddLight(pointLight2);
     
 //Left lamp, left to left couch
     std::shared_ptr<PointLight> pointLight3 = std::make_shared<PointLight>();
     //    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight3->SetPosition(glm::vec3(-4.65f, 3.0f,-3.78f));
-    pointLight3->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*1.0f);
+    pointLight3->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*1.f);
     newScene->AddLight(pointLight3);
+    
+    
+    std::shared_ptr<PointLight> pointLight4 = std::make_shared<PointLight>();
+    //    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
+    pointLight4->SetPosition(glm::vec3(-4.26099f,1.09292f,3.30543f));
+    pointLight4->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*1.f);
+    newScene->AddLight(pointLight4);
+    
+    
     
     
     std::shared_ptr<DirectionalLight> dirLight = std::make_shared<DirectionalLight>();
@@ -306,11 +327,11 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
 //    pointLight->SetPosition(glm::vec3(-2.4f,-.29f,.3f));
     dirLight->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
 	dirLight->Rotate(glm::vec3(1.0f, 0.0f,0.0f), PI / 10);
-    dirLight->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 4);
+    dirLight->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 3);
     
-        dirLight->SetLightColor(glm::vec3(218.f, 226.f, 214.f)/255.f);
+//        dirLight->SetLightColor(glm::vec3(218.f, 226.f, 214.f)/255.f);
     
-//    dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
+    dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
   newScene->AddLight(dirLight);
     
     
