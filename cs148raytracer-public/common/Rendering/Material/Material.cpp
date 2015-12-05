@@ -96,11 +96,7 @@ void Material::SetIOR(float input)
     indexOfRefraction = input;
 }
 
-void Material::SetSpecular(glm::vec3 inputColor, float inputShininess)
-{
-    specularColor = inputColor;
-    shininess = inputShininess;
-}
+
 
 void Material::LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial)
 {

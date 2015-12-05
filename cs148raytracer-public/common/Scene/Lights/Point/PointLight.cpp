@@ -13,12 +13,12 @@ void PointLight::ComputeSampleRays(std::vector<Ray>& output, glm::vec3 origin, g
 float PointLight::ComputeLightAttenuation(glm::vec3 origin) const
 {
     float kc = 0.f;
-    float kl = 1.f;
+    float kl = .8f;
     float kq = 0.f;
     //float radius = 5.f;
     //pow(clamp(1 - pow(lightDistance/pointLight.radius, 4)
     float d = glm::distance(origin, glm::vec3(GetPosition()));
-    float att= (2.f)*(1.f)/(kc + kl*d + std::pow(kq*d, 2));
+    float att= (1.f)/(kc + kl*d + std::pow(kq*d, 2));
     return std::max(att, 0.f);
 }
 

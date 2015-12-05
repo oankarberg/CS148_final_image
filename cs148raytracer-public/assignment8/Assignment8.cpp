@@ -227,7 +227,6 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         std::shared_ptr<Material> materialCopy = roomMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterialsLivingRoom[i]);
         materialCopy->SetAmbient(glm::vec3(0.0f));
-        materialCopy->SetSpecular(glm::vec3(0.0f), 0.0f);
         livingroomTemp[i]->SetMaterial(materialCopy);
         
         std::string meshName = livingroomTemp[i]->GetName();
@@ -266,7 +265,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         if(meshName == "Whisky" || meshName == "Whisky_in_vase"){
             materialCopy->SetReflectivity(0.1f);
             materialCopy->SetIOR(1.33f);
-            materialCopy->SetTransmittance(.41f);
+            materialCopy->SetTransmittance(.51f);
         }
         
         if(meshName == "Whiskey_glass" ||meshName == "Whiskey_glass.001" || meshName == "Icecube"  || meshName == "Icecube.001"  || meshName == "Whiskey_vase" ){
@@ -276,6 +275,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
         }
         if(meshName == "Carpet_Plane"){
             materialCopy->SetReflectivity(0.f);
+            materialCopy->SetSpecular(glm::vec3(0.f), 0.f);
         }
         livingroomTemp[i]->SetMaterial(materialCopy);
         
@@ -301,6 +301,7 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
 //        pointLight2->SetPosition(glm::vec3(-5.4f,1.5f, -3.4f));
 //    pointLight2->SetPosition(glm::vec3(-0.15f, 4.01f, 4.2328f));
 //     pointLight2->SetPosition(glm::vec3(-1.4f,2.f,3.4f));
+
     pointLight2->SetPosition(glm::vec3(2.25603f,2.29666f,1.9797f));
     pointLight2->SetLightColor(glm::vec3(1.f,1.f,1.f)*1.f);
     newScene->AddLight(pointLight2);
@@ -311,6 +312,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     pointLight3->SetPosition(glm::vec3(-4.65f, 3.0f,-3.78f));
     pointLight3->SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f)*1.f);
     newScene->AddLight(pointLight3);
+
+
     
     
     std::shared_ptr<PointLight> pointLight4 = std::make_shared<PointLight>();
@@ -328,12 +331,23 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     dirLight->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
 	dirLight->Rotate(glm::vec3(1.0f, 0.0f,0.0f), PI / 10);
     dirLight->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 3);
-    
 //        dirLight->SetLightColor(glm::vec3(218.f, 226.f, 214.f)/255.f);
-    
-    dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
+	dirLight->SetLightColor(5.f*glm::vec3(182.f,126.f,91.f) / 255.f);
   newScene->AddLight(dirLight);
     
+    
+std::shared_ptr<DirectionalLight> dirLighthemi = std::make_shared<DirectionalLight>();
+//    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
+//    pointLight->SetPosition(glm::vec3(-2.4f,-.29f,.3f));
+dirLighthemi->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
+dirLighthemi->Rotate(glm::vec3(1.0f, 0.0f,0.0f), -PI / 10);
+    dirLighthemi->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 3);
+    
+    
+    dirLighthemi->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
+    
+    //    dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
+    newScene->AddLight(dirLighthemi);
     
 //    
 //    std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(glm::vec2(.2f,.2f));

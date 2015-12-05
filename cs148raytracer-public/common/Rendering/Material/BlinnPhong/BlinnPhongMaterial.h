@@ -8,7 +8,7 @@ public:
     BlinnPhongMaterial();
 
     void SetDiffuse(glm::vec3 input);
-    void SetSpecular(glm::vec3 inputColor, float inputShininess);
+    virtual void SetSpecular(glm::vec3 inputColor, float inputShininess);
     virtual void SetAffectedByLight(bool isAffected);
     virtual std::shared_ptr<Material> Clone() const override;
 

@@ -14,26 +14,26 @@ float DirectionalLight::ComputeLightAttenuation(glm::vec3 origin) const
 void DirectionalLight::GenerateRandomPhotonRay(Ray& ray) const
 {
     glm::vec3 n = glm::vec3(GetForwardDirection());
-    glm::vec3 pos = glm::vec3(GetPosition());
+    
     float u1 = rand()/(float)RAND_MAX;
-    float u2 = rand()/(float)RAND_MAX;
+    float xdelta, ydelta, zdelta = 0;
     
-    float r = 10.f*u1;
-    float theta = 2*PI * u2;
-    glm::vec3 t;
-    if (std::abs(glm::dot(n, glm::vec3(1.f,0.f,0.f))) < 0.90)
-        t = glm::normalize(glm::cross(n, glm::vec3(1.f,0.f,0.f)));
-    else
-        t = glm::normalize(glm::cross(n, glm::vec3(0.f,1.f,0.f)));
-    glm::vec3 b = glm::normalize(glm::cross(n, t));
-    float x = r*cos(theta);
-    float y = r*sin(theta);
+    glm::vec3 windowPos;
+    glm::vec3 photonPos;
+    ydelta = (rand()/(float)RAND_MAX - 0.5f) * 2.f * 2.5f;
     
-    x = ((rand())/(float)RAND_MAX + (-0.5f))*2.f * 1.f;
-    y = ((rand())/(float)RAND_MAX + (-0.5f))*2.f * 8.f;
-    glm::vec3 photonPos = pos + r*x + b*y;
+    if (u1 < 0.5f){
+        windowPos = glm::vec3(5.73f,1.84f,-2.9f);
+        zdelta = (rand()/(float)RAND_MAX - 0.5f) * 2.f * 4.5f;
+        photonPos = windowPos + glm::vec3(0.f,ydelta,zdelta);
+    }else{
+        windowPos = glm::vec3(0.22f,1.84f,-8.0f);
+        xdelta = (rand()/(float)RAND_MAX - 0.5f) * 2.f * 4.5f;
+        photonPos = windowPos + glm::vec3(xdelta,ydelta,0.f);
+
+    }
     
-    ray.SetPosition(photonPos);
     ray.SetRayDirection(n);
+    ray.SetRayPosition(photonPos);
     
 }
