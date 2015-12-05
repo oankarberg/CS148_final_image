@@ -1,5 +1,5 @@
 # Blender MTL File: 'dream room rev.blend'
-# Material Count: 89
+# Material Count: 90
 
 newmtl Book_spine
 Ns 96.078431
@@ -237,6 +237,17 @@ Ks 0.8 0.8 0.8
 d 1
 illum 2
 
+newmtl Sweep_shade
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd livingroom/sofa_white_text.jpg
+
 newmtl Wood
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -301,7 +312,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd livingroom/ny_wallpaper.jpg
+map_Kd livingroom/ny_wallpaper3.jpg
 
 newmtl brick
 Ns 96.078431
@@ -842,7 +853,7 @@ map_Kd textures/painted_stone.jpg
 newmtl red
 Ns 96.078431
 Ka 0.875000 0.454856 0.022614
-Kd 0.371484 0.000000 0.003660
+Kd 0.538230 0.000000 0.000693
 Ks 1.000000 0.572035 0.324064
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000

@@ -18,7 +18,7 @@ float PointLight::ComputeLightAttenuation(glm::vec3 origin) const
     //float radius = 5.f;
     //pow(clamp(1 - pow(lightDistance/pointLight.radius, 4)
     float d = glm::distance(origin, glm::vec3(GetPosition()));
-    float att= (1.f)/(kc + kl*d + std::pow(kq*d, 2));
+    float att= (2.f)*(1.f)/(kc + kl*d + std::pow(kq*d, 2));
     return std::max(att, 0.f);
 }
 
