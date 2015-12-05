@@ -288,9 +288,9 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
 //    pointLight2->SetPosition(glm::vec3(-0.15f, 4.01f, 4.2328f));
 //     pointLight2->SetPosition(glm::vec3(-1.4f,2.f,3.4f));
     pointLight2->SetPosition(glm::vec3(1.71f,1.6447f,4.f));
-    pointLight2->SetLightColor(glm::vec3(1.f,1.f,1.f));
+  pointLight2->SetLightColor(glm::vec3(1.f,1.f,1.f));
     newScene->AddLight(pointLight2);
-    
+  
     std::shared_ptr<PointLight> pointLight3 = std::make_shared<PointLight>();
     //    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight3->SetPosition(glm::vec3(-2.65f, 2.0f,-3.78f));
@@ -304,8 +304,8 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     dirLight->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
 	dirLight->Rotate(glm::vec3(1.0f, 0.0f,0.0f), PI / 10);
     dirLight->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 4);
-    
-//        dirLight->SetLightColor(glm::vec3(0.f,1.f,0.f));
+    dirLight->SetPosition(glm::vec3(6.f,1.f, -8.0f));
+  //     dirLight->SetLightColor(3.f*glm::vec3(0.f,1.f,0.f));
     dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
   //newScene->AddLight(dirLight);
     

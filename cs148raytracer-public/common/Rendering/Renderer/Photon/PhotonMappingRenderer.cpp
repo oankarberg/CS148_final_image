@@ -15,7 +15,7 @@
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     BackwardRenderer(scene, sampler), 
-    diffusePhotonNumber(2000000),
+    diffusePhotonNumber(1000000),
     maxPhotonBounces(1000)
 {
     srand(static_cast<unsigned int>(time(NULL)));
@@ -83,16 +83,16 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
     if (storedScene->Trace(photonRay, &state)){
         
         const MeshObject* hitMeshObject = state.intersectedPrimitive->GetParentMeshObject();
-        /*
+        
         if (hitMeshObject->GetName() == "window_1" || hitMeshObject->GetName() == "window_2" || !hitMeshObject->GetMaterial()->isAffectedByLight()){
-            Ray* newRay = new Ray(photonRay->GetRayPosition(state.intersectionT)+ photonRay->GetRayDirection()*0.1f, photonRay->GetRayDirection(), photonRay->GetMaxT());
+            Ray* newRay = new Ray(photonRay->GetRayPosition(state.intersectionT)+ photonRay->GetRayDirection()*0.05f, photonRay->GetRayDirection(), photonRay->GetMaxT());
+            
             
             TracePhoton(photonMap, newRay, lightIntensity, path, currentIOR, remainingBounces);
             return;
-        }*/
+        }
         if(path.size() != 1){
             const glm::vec3 intersectionPoint = state.intersectionRay.GetRayPosition(state.intersectionT);
-            
             Photon myPhoton;
             myPhoton.position = intersectionPoint;
             myPhoton.intensity = lightIntensity;
@@ -107,7 +107,7 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
         pr = std::max(pr, ref.z);
         float r = rand()/(float)RAND_MAX;
         
-        if (r < pr) {
+        if (r < pr+0.1f) {
             //Scatter
             
             path.push_back('R');
@@ -141,12 +141,12 @@ void PhotonMappingRenderer::TracePhoton(PhotonKdtree& photonMap, Ray* photonRay,
 glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const
 {
     glm::vec3 finalRenderColor = BackwardRenderer::ComputeSampleColor(intersection, fromCameraRay);
-    // glm::vec3 finalRenderColor = glm::vec3(0.f,0.f,0.f);
+    //glm::vec3 finalRenderColor = glm::vec3(0.f,0.f,0.f);
     glm::vec3 indirectColor = glm::vec3(0.f,0.f,0.f);
     
     #define FG 0
-    const int FG_RAYS =16;
-    const float MULTIPLIER = 15.f;
+    const int FG_RAYS =24;
+    const float MULTIPLIER = 80.f;
     const float RADIUS = 0.003f;
     
     
