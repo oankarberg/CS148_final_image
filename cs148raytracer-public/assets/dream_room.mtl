@@ -1,27 +1,5 @@
 # Blender MTL File: 'dream room rev.blend'
-# Material Count: 93
-
-newmtl Book_spine
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/4.jpg
-
-newmtl Book_spine.001
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/4.jpg
+# Material Count: 85
 
 newmtl Book_spine.002
 Ns 96.078431
@@ -35,28 +13,6 @@ illum 2
 map_Kd textures/4.jpg
 
 newmtl Book_spine.003
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/4.jpg
-
-newmtl Hard_Cover_base
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/4.jpg
-
-newmtl Hard_Cover_base.001
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -89,28 +45,6 @@ d 1.000000
 illum 2
 map_Kd textures/4.jpg
 
-newmtl Hard_Cover_top
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/4.jpg
-
-newmtl Hard_Cover_top.001
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/4.jpg
-
 newmtl Hard_Cover_top.002
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -132,28 +66,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd textures/4.jpg
-
-newmtl Inner_mat
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/book2.jpg
-
-newmtl Inner_mat.001
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/book2.jpg
 
 newmtl Inner_mat.002
 Ns 96.078431
@@ -329,7 +241,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd backgroundsky.jpg
+map_Kd livingroom/ny_wallpaper6.jpg
 
 newmtl brick
 Ns 96.078431

@@ -42,7 +42,7 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateDOFRayForNormalizedCoordinates(g
     }while((randomR1*randomR1 + randomR2*randomR2 ) > 1.f);
     
     
-    const float focalLength = 3.5f;
+    const float focalLength = 5.5f;
     const float planeFocalHeight = std::tan(fov / 2.f) * 2.f * focalLength;
     const float planeFocalWidth = planeFocalHeight * aspectRatio;
     
