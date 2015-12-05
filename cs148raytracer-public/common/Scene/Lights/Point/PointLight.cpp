@@ -13,7 +13,7 @@ void PointLight::ComputeSampleRays(std::vector<Ray>& output, glm::vec3 origin, g
 float PointLight::ComputeLightAttenuation(glm::vec3 origin) const
 {
     float kc = 0.f;
-    float kl = 1.f;
+    float kl = .8f;
     float kq = 0.f;
     //float radius = 5.f;
     //pow(clamp(1 - pow(lightDistance/pointLight.radius, 4)

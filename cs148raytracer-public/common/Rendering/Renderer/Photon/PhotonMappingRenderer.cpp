@@ -11,7 +11,7 @@
 #include "common/Rendering/Material/Material.h"
 #include "glm/gtx/component_wise.hpp"
 
-#define VISUALIZE_PHOTON_MAPPING 1
+#define VISUALIZE_PHOTON_MAPPING 0
 
 PhotonMappingRenderer::PhotonMappingRenderer(std::shared_ptr<class Scene> scene, std::shared_ptr<class ColorSampler> sampler):
     BackwardRenderer(scene, sampler), 
@@ -144,10 +144,10 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
     //glm::vec3 finalRenderColor = glm::vec3(0.f,0.f,0.f);
     glm::vec3 indirectColor = glm::vec3(0.f,0.f,0.f);
     
-    #define FG 0
-    const int FG_RAYS =24;
+    #define FG 1
+    const int FG_RAYS =16;
     const float MULTIPLIER = 80.f;
-    const float RADIUS = 0.003f;
+    const float RADIUS = 0.02f;
     
     
     const MeshObject* intersectionObject = intersection.intersectedPrimitive->GetParentMeshObject();
@@ -227,7 +227,7 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
     #endif
     for (Photon photon : foundPhotons) {
         const glm::vec3 brdfResponse = objectMaterial->ComputeBRDF(intersection, photon.intensity, photon.toLightRay, fromCameraRay, 1.0f);
-        //indirectColor += MULTIPLIER*(brdfResponse)/(RADIUS*RADIUS*PI);
+        indirectColor += MULTIPLIER*(brdfResponse)/(RADIUS*RADIUS*PI);
     }
 
     #endif

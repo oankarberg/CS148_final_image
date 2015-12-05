@@ -14,6 +14,8 @@ public:
     virtual std::shared_ptr<Material> Clone() const = 0;
     virtual void LoadMaterialFromAssimp(std::shared_ptr<struct aiMaterial> assimpMaterial);
 
+    virtual void SetSpecular(glm::vec3 inputColor, float inputShininess) = 0;
+    
     virtual bool HasDiffuseReflection() const = 0;
     virtual bool HasSpecularReflection() const { return IsReflective(); }
     virtual void SetAffectedByLight(bool affected) = 0;
