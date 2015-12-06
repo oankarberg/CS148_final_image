@@ -90,7 +90,7 @@ int Assignment8::GetMaxRefractionBounces() const
 
 glm::vec2 Assignment8::GetImageOutputResolution() const
 {
-    return glm::vec2(640.f, 480.f);
+    return glm::vec2(1080.f, 810.f);
 }
 
 
@@ -235,14 +235,14 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
     std::shared_ptr<BlinnPhongMaterial> roomMaterial = std::make_shared<BlinnPhongMaterial>();
     roomMaterial->SetDiffuse(glm::vec3(1.f, 1.f, 1.f));
 //    roomMaterial->SetSpecular(glm::vec3(0.6f, 0.6f, 0.6f), 40.f);
-    roomMaterial->SetAmbient(glm::vec3(0.2f));
+//    roomMaterial->SetAmbient(glm::vec3(0.2f));
     
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterialsLivingRoom;
     std::vector<std::shared_ptr<MeshObject>>  livingroomTemp = MeshLoader::LoadMesh("dream_room.obj", &loadedMaterialsLivingRoom);
     for (size_t i = 0; i < livingroomTemp.size(); ++i) {
         std::shared_ptr<Material> materialCopy = roomMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterialsLivingRoom[i]);
-        materialCopy->SetAmbient(glm::vec3(0.15f));
+        materialCopy->SetAmbient(glm::vec3(0.0f));
         livingroomTemp[i]->SetMaterial(materialCopy);
         
         std::string meshName = livingroomTemp[i]->GetName();
@@ -324,9 +324,9 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
 //        pointLight2->SetPosition(glm::vec3(-5.4f,1.5f, -3.4f));
 //    pointLight2->SetPosition(glm::vec3(-0.15f, 4.01f, 4.2328f));
 //     pointLight2->SetPosition(glm::vec3(-1.4f,2.f,3.4f));
-    pointLight2->SetPosition(glm::vec3(2.25603f,2.29666f,1.9797f));
+    pointLight2->SetPosition(glm::vec3(2.25603f,2.29666f,2.9797f));
     pointLight2->SetLightColor(glm::vec3(1.f,1.f,1.f)*1.f);
-//    newScene->AddLight(pointLight2);
+    newScene->AddLight(pointLight2);
     
 //Left lamp, left to left couch
     std::shared_ptr<PointLight> pointLight3 = std::make_shared<PointLight>();
@@ -354,21 +354,21 @@ std::shared_ptr<Scene> Assignment8::LoadRealScene() const {
 	dirLight->Rotate(glm::vec3(1.0f, 0.0f,0.0f), PI / 10);
     dirLight->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 3);
 //        dirLight->SetLightColor(glm::vec3(218.f, 226.f, 214.f)/255.f);
-    dirLight->SetLightColor(glm::vec3(252, 196, 92)/ 255.f);
+	dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
   	newScene->AddLight(dirLight);
     
     
-std::shared_ptr<DirectionalLight> dirLighthemi = std::make_shared<DirectionalLight>();
+	std::shared_ptr<DirectionalLight> dirLighthemi = std::make_shared<DirectionalLight>();
 //    pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
 //    pointLight->SetPosition(glm::vec3(-2.4f,-.29f,.3f));
-dirLighthemi->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
-dirLighthemi->Rotate(glm::vec3(1.0f, 0.0f,0.0f), -PI / 10);
+	dirLighthemi->Rotate(glm::vec3(0.0f, 1.0f,0.0f), -PI);
+	dirLighthemi->Rotate(glm::vec3(1.0f, 0.0f,0.0f), -PI / 10);
     dirLighthemi->Rotate(glm::vec3(.0f, 1.0f,0.0f), -PI / 3);
     
     
-     dirLighthemi->SetLightColor(glm::vec3(252, 196, 92)/ 255.f);
+//     dirLighthemi->SetLightColor(glm::vec3(252, 196, 92)/ 255.f);
     
-    //    dirLight->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
+        dirLighthemi->SetLightColor(2.f*glm::vec3(182.f,126.f,91.f) / 255.f);
     newScene->AddLight(dirLighthemi);
     
 //    

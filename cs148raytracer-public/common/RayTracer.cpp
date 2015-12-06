@@ -46,6 +46,7 @@ void RayTracer::Run()
     int pixelsProcessed = 0;
     int fivePercent = amountofPixels/100;
     std::cout << "Preparation done!";
+//    #pragma omp parallel for num_threads(8)
     for (int r = 0; r < static_cast<int>(currentResolution.y); ++r) {
         for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {
             if (pixelsProcessed%fivePercent == 0)
