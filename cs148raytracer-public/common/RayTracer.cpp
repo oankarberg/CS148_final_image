@@ -44,7 +44,7 @@ void RayTracer::Run()
     
     int amountofPixels =currentResolution.y *currentResolution.x;
     int pixelsProcessed = 0;
-    int fivePercent = amountofPixels/20;
+    int fivePercent = amountofPixels/100;
     std::cout << "Preparation done!";
     for (int r = 0; r < static_cast<int>(currentResolution.y); ++r) {
         for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {

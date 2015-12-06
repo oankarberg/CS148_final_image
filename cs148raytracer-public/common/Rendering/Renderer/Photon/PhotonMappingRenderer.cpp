@@ -145,9 +145,9 @@ glm::vec3 PhotonMappingRenderer::ComputeSampleColor(const struct IntersectionSta
     glm::vec3 indirectColor = glm::vec3(0.f,0.f,0.f);
     
     #define FG 1
-    const int FG_RAYS =64;
-    const float MULTIPLIER = 80.f;
-    const float RADIUS = 0.03f;
+    const int FG_RAYS =100;
+    const float MULTIPLIER = 90.f;
+    const float RADIUS = 0.02f;
     
     
     const MeshObject* intersectionObject = intersection.intersectedPrimitive->GetParentMeshObject();
